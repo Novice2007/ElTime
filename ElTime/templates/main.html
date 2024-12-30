@@ -1,0 +1,49 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>ElTime</title>
+
+		<link rel="stylesheet" href="{% static '/css/main.css' %}">
+
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+		<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+	</head>
+	<body>
+		<header>
+			<h1>ElTime</h1>
+			<a href="#">User Name</a>
+		</header>
+		<div class="content">
+			<form class="add-task" method="post" action="#">
+				{% csrf_token %}
+				<input type="text" name="new-task-content" placeholder="Content...">
+				<input type="date" name="new-task-time">
+				<button>Create</button>  <!-- switch text to icos from the boxicons -->
+			</form>
+			<div class="tasks-list">
+
+				{% for task in tasks %}
+				
+				<form class="task {{ task.status }}" method="post" action="#">
+					{% csrf_token %}
+
+					<p class="task-content">
+						{{ task.content }}
+					</p>
+					<input type="date" name="time-elapsed" readonly value={{ task.time_elapsed }}>
+					<button class="task-button-top"><i class='bx bx-check'></i></button>
+					<button class="task-button-bottom"><i class='bx bx-cog'></i></button>
+				</form>
+				
+				{% endfor %}
+
+			</div>
+		</div>
+	</body>
+</html>

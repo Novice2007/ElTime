@@ -1,5 +1,7 @@
 asgiref==3.8.1
-Django==4.2.17
+Django==5.1.4
+dotenv @ file:///C:/Code/RomeoProject/ElTime/ElTime
+python-dotenv==1.0.1
+setuptools==75.6.0
 sqlparse==0.5.3
-typing_extensions==4.12.2
 tzdata==2024.2

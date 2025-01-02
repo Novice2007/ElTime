@@ -1,23 +1,28 @@
 :root {
-    --base-button-border-color: white;
-    --base-button-background-color: white;
-    --base-button-text-color: black;
+    --interface-main-color: rgb(69, 193, 255);
 
-    --primary-button-border-color: black;
-    --primary-button-background-color: black;
+    --base-button-border-color: black;
+    --base-button-background-color: white;
+    --base-button-text-color: var(--interface-main-color);
+
+    --primary-button-border-color: var(--interface-main-color);
+    --primary-button-background-color: var(--interface-main-color);
     --primary-button-text-color: white;
 
-    --secondary-button-border-color: black;
+    --secondary-button-border-color: var(--interface-main-color);
     --secondary-button-background-color: white;
-    --secondary-button-text-color: black;
+    --secondary-button-text-color: var(--interface-main-color);
 
 }
 
 button {
-    height: 50px;
-    padding: 10px 15px;
+    /* font-size: .9rem; */
+    font-weight: 600;
 
-    border: 1px solid;
+    height: 50px;
+    padding: 10px 25px;
+
+    border: 2px solid;
     cursor: pointer;
 
     border-color: var(--base-button-border-color);
@@ -49,7 +54,6 @@ button.secondary:hover {
     color: var(--secondary-button-background-color);
 }
 
-
 .input {
     display: flex;
     flex-direction: column;
@@ -57,18 +61,14 @@ button.secondary:hover {
     gap: 5px;
 }
 
-.input label {
-    font-size: .8rem;
+input {
+    padding: 15px 15px;
+    border: 1px solid var(--interface-main-color);
 }
-
-.input input {
-    padding: 10px 10px;
-    border: 1px solid black;
-}
-
 
 .horizontal-separator {
-    height: 1px;
-    border: 1px dashed gray;
+    height: 0;
+    border: none;
+    border-top: 1px solid darkslategray;
     width: 80%;
 }

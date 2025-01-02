@@ -9,13 +9,70 @@ header h1 {
 	color: black;
 }
 
-
-
-.slide {
-    position: fixed;
-    top: 100vh;
-    transition: .5s;
-
-    display: flex;
-    flex-direction: column;
+#about {
+    width: 40%;
+    height: 50%;
+    gap: 30px;
 }
+
+#about p, h1 {
+    position: relative;
+    transition: .5s;
+}
+
+#about h1 {
+    left: 0;
+}
+
+#about p {
+    right: 0;
+    text-align: center;
+    line-height: 1.75rem;
+}
+
+.action-form {
+    width: 50%;
+    top: 150vh;
+    transition: 1s;
+}
+
+.action-form form {
+    width: 100%;
+    gap: 30px;
+}
+
+.action-buttons {
+    justify-content: space-around;
+    gap: 30px;
+    width: 100%;
+}
+
+.action-buttons button {
+    width: 100%;
+}
+
+.action-buttons .primary {
+    border-color: white;
+}
+
+.action-buttons .secondary, .secondary:hover {
+    border-color: white;
+}
+
+#form-actions button {
+    border: none;
+    height: auto;
+    padding: 5px;
+    margin: 0;
+    background-color: transparent;
+    color: white;
+}
+
+/* #form-actions #hidden {
+    border: 2px solid white;
+    padding: 25px;
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: height 0.5s ease, opacity 0.5s ease;
+} */

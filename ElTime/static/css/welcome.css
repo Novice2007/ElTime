@@ -1,0 +1,21 @@
+body {
+    height: 100vh;
+    overflow: hidden;
+}
+
+header h1 {
+	align-self: center;
+	text-decoration: none;
+	color: black;
+}
+
+
+
+.slide {
+    position: fixed;
+    top: 100vh;
+    transition: .5s;
+
+    display: flex;
+    flex-direction: column;
+}

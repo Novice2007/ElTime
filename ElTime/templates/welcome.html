@@ -1,0 +1,90 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+
+    <link rel="stylesheet" href="{% static '/css/main.css' %}">
+    <link rel="stylesheet" href="{% static '/css/elements.css' %}">
+    <link rel="stylesheet" href="{% static '/css/welcome.css' %}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <header id="header">
+        <h1>Добро пожаловать в ElTime</h1>
+        <div class="flex-row">
+            <button type="button" class="secondary" onclick="handleRegistrationClick()">Войти</button>
+            <button type="button" class="secondary" onclick="handleAuthorizationClick()">Зарегистрироваться</button>
+        </div>
+    </header>
+    <div class="flex-column">
+        <div id="about">
+            <h1>Добро пожаловать</h1>
+            <div class="horizontal-separator"></div>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi eos exercitationem enim possimus distinctio sint ducimus similique, reprehenderit doloremque, ullam consequuntur dolore ipsum ab fugit iste id officia tenetur! Sed!</p>
+        </div>
+        
+        <div class="slide" id="registration">
+            <form action="actions/register/" method="post">
+                <p class="error-message"></p>
+                
+                <div class="input">
+                    <label for="login">Логин</label>
+                    <input type="text" name="login" id="registration-login">
+                </div>
+                <div class="input">
+                    <label for="email">Почта</label>
+                    <input type="text" name="email" id="email">
+                </div>
+                <div class="input">
+                    <label for="registration-password">Пароль</label>
+                    <input type="password" name="password" id="registration-password">
+                </div>
+                <div class="input">
+                    <label for="password-repeat">Повторите пароль</label>
+                    <input type="password" name="password-repeat" id="password_repeat">
+                </div>
+
+                <button type="submit">Зарегистрироваться</button>
+            </form>
+        </div>
+        <div class="slide" id="authorization">
+            <form action="actions/auth/" method="post">
+                <p class="error-message"></p>
+
+                <div class="input">
+                    <label for="login">Логин</label>
+                    <input type="text" name="login" id="auth-login">
+                </div>
+
+                <div class="input">
+                    <label for="auth-password">Пароль</label>
+                    <input type="password" name="password" id="auth-password">
+                </div>
+
+                <div id="form-actions">
+                    <button type="button">Забыли пароль?</button>
+
+                    <div class="hidden">
+                        <div class="input">
+                            <label for="recovery-email"></label>
+                            <input type="email" name="recovery-email" id="recovery-email">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit">Войти</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{% static '/js/welcome.js' %}"></script>
+</body>
+</html>

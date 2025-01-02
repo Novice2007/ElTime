@@ -1,11 +1,8 @@
 * {
-	font-family: "Comfortaa", sans-serif;
-	outline: none;
-}
-
-body {
 	padding: 0;
 	margin: 0;
+	font-family: "Comfortaa", sans-serif;
+	outline: none;
 }
 
 header {
@@ -20,10 +17,17 @@ header {
 	z-index: 1;
 }
 
-header h1, a {
-	align-self: center;
-	text-decoration: none;
-	color: black;
+.flex-column {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 15px;
+}
+
+.flex-row {
+	display: flex;
+	align-items: center;
+	gap: 15px;
 }
 
 i {
@@ -32,84 +36,9 @@ i {
 	font-size: 20px;
 }
 
-button {
-	border: 1px solid white;
-	border-radius: 12px;	
-	padding: 10px;
-	margin: 0;
-	background-color: white;
-	align-content: center;
-	justify-content: center;
-	align-items: center;
-	justify-items: center;
-	transition: 250ms;
-}
-
-button:hover {
-	background-color: rgb(222, 222, 222);
-}
-
-input {
-	border: 1px solid;
-	border-width: 0 0 1px 0;
-}
-
-p {
-	margin: 0;
-	align-content: center;
-}
-
-.content {
-	position: relative;
-	top: 60px;
-	padding-top: 50px;
-	display: grid;
-	grid-template-columns: auto 70% auto;
-	row-gap: 30px;
-}
-
-.add-task, .tasks-list {
-	grid-column: 2;
-	display: grid;
-	row-gap: 10px;
-}
-
-.add-task {
-	grid-template-columns: 1fr 112px auto;
-	column-gap: 15px;
-}
-
-.add-task .new-task-content {
-	grid-column: 1;
-	padding: 0px 10px;
-}
-
-.add-task button {
-	grid-column: 3;
-}
-
-.add-task .new-task-content {
-	grid-column: 1;
-}
-
-.task {
-	display: grid;
-	column-gap: 15px;
-	grid-template-columns: 1fr repeat(3, auto);
-}
-
-.task .task-content {
-	grid-column: 1;
-}
-
-.task .input {
-	grid-column: 2;
-}
-
-.task .task-button-top {
-	grid-column: 3;
-}
-
-.task .task-button-bottom {
-	grid-column: 4;
+form {
+	display: flex;
+	flex-direction: column;
+	background-color: rgb(251, 236, 222);
+	padding: 25px;
 }

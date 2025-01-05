@@ -1,0 +1,72 @@
+:root {
+    --interface-main-color: rgb(69, 193, 255);
+
+    --base-button-border-color: black;
+    --base-button-background-color: white;
+    --base-button-text-color: var(--interface-main-color);
+
+    --primary-button-border-color: var(--interface-main-color);
+    --primary-button-background-color: var(--interface-main-color);
+    --primary-button-text-color: white;
+
+    --secondary-button-border-color: var(--interface-main-color);
+    --secondary-button-background-color: white;
+    --secondary-button-text-color: var(--interface-main-color);
+
+}
+
+button {
+    /* font-size: .9rem; */
+    font-weight: 600;
+
+    height: 50px;
+    padding: 10px 25px;
+
+    border: 2px solid;
+    cursor: pointer;
+
+    border-color: var(--base-button-border-color);
+    background-color: var(--base-button-background-color);
+    color: var(--base-button-text-color);
+}
+
+button.primary {
+    border-color: var(--primary-button-border-color);
+    background-color: var(--primary-button-background-color);
+    color: var(--primary-button-text-color);
+}
+
+button.primary:hover {
+    background-color: var(--primary-button-text-color);
+    color: var(--primary-button-background-color);
+}
+
+button.secondary {
+    border-color: var(--secondary-button-border-color);
+    background-color: var(--secondary-button-background-color);
+    color: var(--secondary-button-text-color);
+}
+
+button.secondary:hover {
+    background-color: var(--secondary-button-text-color);
+    color: var(--secondary-button-background-color);
+}
+
+.input {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 5px;
+}
+
+input {
+    padding: 15px 15px;
+    border: 1px solid var(--interface-main-color);
+}
+
+.horizontal-separator {
+    height: 0;
+    border: none;
+    border-top: 1px solid darkslategray;
+    width: 80%;
+}

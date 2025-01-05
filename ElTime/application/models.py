@@ -1,64 +1,31 @@
 from django.db import models
+from django.contrib.auth.models import User
+
 from django.utils.timezone import now
-# from django.contrib.auth.hashers import make_password
-
-
-class User(models.Model):
-    user_id = models.AutoField(
-        primary_key=True,
-    )
-    name = models.CharField(
-        max_length=32
-    )
-    surname = models.CharField(
-        max_length=32
-    )
-    password = models.CharField(
-        max_length=88,
-    )
-    email = models.EmailField()
-
-    fields = (
-        "user_id",
-        "name",
-        "surname",
-        "password",
-        "email",
-    )
-    
-    class Meta:
-        verbose_name = ("User")
-        verbose_name_plural = ("Users")
-        
-    def __str__(self):
-        return self.name
 
 
 class Task(models.Model):
-    user_id = models.ForeignKey(
-        User,
-        to_field="user_id",
-        on_delete=models.CASCADE
+    user = models.ForeignKey(
+        to=User,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
     )
     content = models.CharField(
-        max_length=128,
+        max_length=512,
         default="",
     )
-    created = models.TimeField(
-        default=now
-    )
-    expired = models.BooleanField(
-        default=False
+    deadline_date = models.DateField(
+        default=now()
     )
     finished = models.BooleanField(
         default=False
     )
     
     fields = (
-        "user_id",
+        "user",
         "content",
-        "created",
-        "expired",
+        "deadline_date",
         "finished",
     )
     

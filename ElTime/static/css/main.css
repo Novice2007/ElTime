@@ -3,6 +3,7 @@
     margin: 0;
     font-family: "Comfortaa", sans-serif;
     outline: none;
+    transition: .5s;
 }
 
 header {

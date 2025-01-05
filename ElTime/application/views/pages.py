@@ -6,9 +6,11 @@ from django.shortcuts import (
     render,
 )
 
-from ..models import (
+from django.contrib.auth.models import (
     User,
-    Task
+)
+from ..models import (
+    Task,
 )
 
 import datetime

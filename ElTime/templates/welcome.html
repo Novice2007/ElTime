@@ -31,7 +31,9 @@
         </div>
         
         <div class="fixed-center flex-column action-form" id="registration">
-            <form action="actions/register/" method="post">
+            <form action="/actions/registration/" method="post">
+                {% csrf_token %}
+
                 <!-- <p class="error-message"></p> -->
                 
                 <div class="input">
@@ -58,7 +60,9 @@
             </form>
         </div>
         <div class="fixed-center flex-column action-form" id="authorization">
-            <form action="actions/auth/" method="post">
+            <form action="/actions/authorization/" method="post">
+                {% csrf_token %}
+
                 <!-- <p class="error-message"></p> -->
 
                 <div class="input">

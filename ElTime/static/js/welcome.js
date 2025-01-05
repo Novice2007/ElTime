@@ -1,56 +1,77 @@
-const registrationSlide = document.getElementById("registration");
-const authorizationSlide = document.getElementById("authorization");
-
-const hidden = document.getElementById("hidden");
-const aboutBlock = document.getElementById("about");
-
-const aboutBlockHeader = aboutBlock.getElementsByTagName("h1")[0];
-const aboutBlockParagraph = aboutBlock.getElementsByTagName("p")[0];
-
-
-// let authorizationHiddenBlockIsVisible = false;
-let authorizationHiddenBlockIsVisible = true;
-
-const hideAboutBlock = () => {
-    aboutBlockHeader.style.left = "-100vh";
-    aboutBlockParagraph.style.right = "-100vh";
+const components = {
+    header: document.getElementById("header"),
+    about: document.getElementById("about"),
+    registration: document.getElementById("registration"),
+    authorization: document.getElementById("authorization"),
 }
 
-const reverseAboutBlock = () => {
-    aboutBlockHeader.style.left = "0";
-    aboutBlockParagraph.style.right = "0";
+const componentsDisplayingStates = {
+    header: true,
+    about: true,
+    registration: false,
+    authorization: false,
+};
+
+const aboutHeader = about.getElementsByTagName("h1")[0];
+const aboutParagraph = about.getElementsByTagName("p")[0];
+
+
+const toggleAbout = () => {
+    if (componentsDisplayingStates.about) {
+        aboutHeader.style.position = "fixed";
+        aboutParagraph.style.position = "fixed";
+        
+        aboutHeader.style.left = "-300%";
+        aboutParagraph.style.right = "-300%";
+        aboutParagraph.style.width = "700px";
+
+        return componentsDisplayingStates.about = false;
+    }
+
+    aboutHeader.style.position = "relative";
+    aboutParagraph.style.position = "relative";
+
+    aboutHeader.style.left = "0";
+    aboutParagraph.style.right = "0";
+    aboutParagraph.style.width = "auto";
+
+    componentsDisplayingStates.about = true;
+}
+
+const toggleHeader = () => {
+    if (componentsDisplayingStates.header) {
+        components.header.style.top = "-80px";
+
+        return componentsDisplayingStates.header = false;
+    }
+    
+    components.header.style.top = "0";
+    componentsDisplayingStates.header = true;
+}
+
+const toggleActionForm = () => {
+    toggleHeader();
+    toggleAbout();
 }
 
 
 const handleRegistrationClick = () => {
-    hideAboutBlock();
+    toggleActionForm();
 
-    registrationSlide.style.top = "50%";
-    authorizationSlide.style.top = "150vh";
+    components.registration.style.top = "50%";
+    components.authorization.style.top = "150vh";
 }
 
 const handleAuthorizationClick = () => {
-    hideAboutBlock();
+    toggleActionForm();
 
-    authorizationSlide.style.top = "50%";
-    registrationSlide.style.top = "150vh";
+    components.registration.style.top = "150vh";
+    components.authorization.style.top = "50%";
 }
 
 const handleCloseActionForm = () => {
-    authorizationSlide.style.top = "150vh";
-    registrationSlide.style.top = "150vh";
+    components.registration.style.top = "150vh";
+    components.authorization.style.top = "150vh";
 
-    reverseAboutBlock();
+    toggleActionForm();
 }
-
-// const handleToggleHiddenBlock = () => {
-//     if (authorizationHiddenBlockIsVisible) {
-//         hidden.style.opacity = "0";
-//         hidden.style.height = "0";
-//         return authorizationHiddenBlockIsVisible = false;
-//     }
-
-//     hidden.style.opacity = "1";
-//     hidden.style.height = "auto";
-//     authorizationHiddenBlockIsVisible = true;
-// }

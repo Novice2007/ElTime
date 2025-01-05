@@ -28,8 +28,6 @@ button {
     border-color: var(--base-button-border-color);
     background-color: var(--base-button-background-color);
     color: var(--base-button-text-color);
-
-    transition: .5s;
 }
 
 button.primary {

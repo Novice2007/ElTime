@@ -4,6 +4,7 @@ from django.http import (
 )
 from django.shortcuts import (
     render,
+    redirect
 )
 
 from django.contrib.auth.models import (
@@ -19,6 +20,9 @@ import datetime
 def welcome(
     request: HttpRequest
 ) -> HttpResponse:
+    if request.user.is_authenticated:
+        return redirect(home, permanent=True)
+
     return render(
         request=request,
         template_name="welcome.html"
@@ -27,51 +31,11 @@ def welcome(
 
 def home(
     request: HttpRequest
-) -> HttpResponse:    
-    # for user in User.objects.all():
-    #     print(
-    #         {
-    #             "user_id": user.user_id,
-    #             "name": user.name,
-    #             "surname": user.surname,
-    #             "email": user.email,
-    #             "password": user.password,
-    #         }
-    #     )
-    
-    context: dict[
-        str, 
-        str | tuple[
-            str,
-            str | bool | datetime._Time
-        ]
-    ] = {
-        "name": "",
-        "surname": "",
-        "tasks": []
-    }
-    
-    # user = User.objects.get(user_id=1)
-    
-    # context["name"] = user.name
-    # context["surname"] = user.surname
-    
-    # user_tasks = Task.objects.filter(
-    #     user_id=user.user_id
-    # )
-    
-    # for task in user_tasks:
-    #     context["tasks"].append(
-    #         {
-    #             "content": task.content,
-    #             "time_elapsed": task.created,
-    #             "status": "finished" if task.finished \
-    #                 else "active"
-    #         }
-    #     )
+) -> HttpResponse:
+    if not request.user.is_authenticated:
+        return redirect(welcome, permanent=True)
     
     return render(
         request=request,
-        template_name="welcome.html",
-        context=context
+        template_name="home.html",
     )

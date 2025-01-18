@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('welcome/', pages.welcome, name="welcome"),
     path('home/', pages.home, name="home"),
+    path("logout/", redirects.logout_redirect, name="logout"),
     path("actions/registration/", redirects.registrate, name="registrate"),
     path("actions/authorization/", redirects.auth, name="auth"),
     path("", redirects.to_welcome, name="empty"),

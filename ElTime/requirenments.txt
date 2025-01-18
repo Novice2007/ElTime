@@ -1,6 +1,5 @@
 asgiref==3.8.1
 Django==5.1.4
-dotenv @ file:///C:/Code/RomeoProject/ElTime/ElTime
 python-dotenv==1.0.1
 setuptools==75.6.0
 sqlparse==0.5.3

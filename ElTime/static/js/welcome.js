@@ -54,6 +54,14 @@ const toggleActionForm = () => {
     toggleAbout();
 }
 
+const clearFormsErrors = () => {
+    for (let element of document.getElementsByClassName(
+        "error-message"
+    )) {
+        element.remove();
+    }
+}
+
 
 const handleRegistrationClick = () => {
     toggleActionForm();
@@ -74,4 +82,5 @@ const handleCloseActionForm = () => {
     components.authorization.style.top = "150vh";
 
     toggleActionForm();
+    setTimeout(clearFormsErrors, 500);
 }

@@ -1,0 +1,46 @@
+header h1 {
+    align-content: center;
+}
+
+#boards {
+    padding: 50px 0;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+}
+
+.board {
+    border: 1px solid var(--interface-main-color);
+    width: 100%;
+    padding: 15px;
+    gap: 0 !important;
+}
+
+.board-head {
+    width: 100%;
+    border-bottom: 1px dashed var(--interface-main-color);
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.task, .create-task {
+    display: grid;
+    grid-template-columns: 150px auto 75px 50px;
+    gap: 15px;
+    align-items: center;
+    padding: 15px 0 15px 10px;
+}
+
+.task:hover {
+    background-color: var(--interface-main-background);
+}
+
+.create-task {
+    width: 100%;
+    grid-template-columns: 150px auto 155px 50px;
+    padding: 0;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed var(--interface-main-color);
+}

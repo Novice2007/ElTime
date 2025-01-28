@@ -68,16 +68,7 @@ def registrate(
         user.save()
         login(request, user)
 
-        return to_home(
-            request,
-            user={
-                "login": user.username,
-                "tasks": {
-                    "task 1": "Lorem ipsum dolor 1",
-                    "task 2": "Lorem ipsum dolor 2",
-                }
-            }
-        )
+        return to_home(request)
     except IntegrityError:
         return to_welcome(
             request,
@@ -108,16 +99,7 @@ def auth(
     if user is not None:
         login(request=request, user=user)
 
-        return to_home(
-            request,
-            user={
-                "login": user.username,
-                "tasks": {
-                    "task 1": "Lorem ipsum dolor 1",
-                    "task 2": "Lorem ipsum dolor 2",
-                }
-            }
-        )
+        return to_home(request)
     
     return to_welcome(
         request,

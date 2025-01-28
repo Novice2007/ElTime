@@ -13,6 +13,8 @@ from django.contrib.auth import (
 from django.db.utils import IntegrityError
 from django.contrib.auth.models import User
 
+from ..models import Board
+
 from .pages import (
     welcome,
     home,
@@ -68,15 +70,14 @@ def registrate(
         user.save()
         login(request, user)
 
+        Board.objects.create(
+            user=user,
+            name="Мои задачи"
+        )
+
         return to_home(
             request,
-            user={
-                "login": user.username,
-                "tasks": {
-                    "task 1": "Lorem ipsum dolor 1",
-                    "task 2": "Lorem ipsum dolor 2",
-                }
-            }
+            user__login=user.username
         )
     except IntegrityError:
         return to_welcome(
@@ -110,13 +111,7 @@ def auth(
 
         return to_home(
             request,
-            user={
-                "login": user.username,
-                "tasks": {
-                    "task 1": "Lorem ipsum dolor 1",
-                    "task 2": "Lorem ipsum dolor 2",
-                }
-            }
+            user__login=user.username
         )
     
     return to_welcome(

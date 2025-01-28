@@ -11,10 +11,11 @@ from django.contrib.auth.models import (
     User,
 )
 from ..models import (
+    Board,
     Task,
 )
 
-import datetime
+import datetime, json
 
 
 def welcome(
@@ -34,7 +35,7 @@ def home(
 ) -> HttpResponse:
     if not request.user.is_authenticated:
         return redirect(welcome, permanent=True)
-    
+
     return render(
         request=request,
         template_name="home.html",

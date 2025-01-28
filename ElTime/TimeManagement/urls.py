@@ -18,7 +18,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from application.views import pages, redirects
+from application.views import pages, redirects, api
 
 
 urlpatterns = [
@@ -28,5 +28,15 @@ urlpatterns = [
     path("logout/", redirects.logout_redirect, name="logout"),
     path("actions/registration/", redirects.registrate, name="registrate"),
     path("actions/authorization/", redirects.auth, name="auth"),
+    
+    path("api/v1/boards/", api.boards, name="boards"),
+    path("api/v1/boards/create/", api.create_board),
+    path("api/v1/boards/update/", api.update_board),
+    path("api/v1/boards/delete/", api.delete_board),
+
+    path("api/v1/tasks/create/", api.create_task),
+    path("api/v1/tasks/update/", api.update_task),
+    path("api/v1/tasks/delete/", api.delete_task),
+
     path("", redirects.to_welcome, name="empty"),
 ]

@@ -1,5 +1,6 @@
 :root {
     --interface-main-color: rgb(69, 193, 255);
+    --interface-main-background: rgba(69, 193, 255, .15);
 
     --base-button-border-color: black;
     --base-button-background-color: white;
@@ -50,6 +51,19 @@ button.secondary {
 button.secondary:hover {
     background-color: var(--secondary-button-text-color);
     color: var(--secondary-button-background-color);
+}
+
+button.simple, a {
+    height: auto;
+    width: auto;
+    padding: 10px;
+    border: none;
+    background-color: transparent;
+    color: gray;
+}
+
+button.simple:hover, a:hover {
+    color: var(--base-button-text-color);
 }
 
 .input {

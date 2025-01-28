@@ -8,24 +8,100 @@
     <title>Home</title>
     <link rel="icon" href="{% static '/images/favicon.ico' %}">
 
+    <link rel="stylesheet" href="{% static '/css/home.css' %}">
     <link rel="stylesheet" href="{% static '/css/main.css' %}">
     <link rel="stylesheet" href="{% static '/css/elements.css' %}">
+
+    <script defer async src="{% static '/js/home.js' %}"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300..700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
     <header>
         <h1>ElTime</h1>
         <div class="flex-row">
-            <a href="/logout">logout</a>
+            <a href="/logout">выйти</a>
             <a href="#">{{ request.session.user.login }}</a>
         </div>
     </header>
-    <div class="flex-column">
-        <h1>Home</h1>
+    <div id="boards" class="flex-column boards">
+        <div id="board-1" class="flex-column board">
+            <div class="flex-row board-head">
+                <div class="board-title">Мои задачи 1</div>
+                <button type="button" class="simple">
+                    <i class='bx bx-cog' ></i>
+                </button>
+            </div>
+            <div class="tasks">
+                <div class="task">
+                    <p class="title">Тема</p>
+                    <p class="content">Контент</p>
+                    <p class="deadline">deadline</p>
+                    <button type="button" class="simple">
+                        <i class='bx bx-check'></i>
+                    </button>
+                </div>
+                <div class="task">
+                    <p class="title">Тема</p>
+                    <p class="content">Контент</p>
+                    <p class="deadline">deadline</p>
+                    <button type="button" class="simple">
+                        <i class='bx bx-check'></i>
+                    </button>
+                </div>
+                <div class="task">
+                    <p class="title">Тема</p>
+                    <p class="content">Контент</p>
+                    <p class="deadline">deadline</p>
+                    <button type="button" class="simple">
+                        <i class='bx bx-check'></i>
+                    </button>
+                </div>
+                <div class="task">
+                    <p class="title">Тема</p>
+                    <p class="content">Контент</p>
+                    <p class="deadline">deadline</p>
+                    <button type="button" class="simple">
+                        <i class='bx bx-check'></i>
+                    </button>
+                </div>
+                <div class="task">
+                    <p class="title">Тема</p>
+                    <p class="content">Контент</p>
+                    <p class="deadline">deadline</p>
+                    <button type="button" class="simple">
+                        <i class='bx bx-check'></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="board-2" class="flex-column board">
+            <div class="flex-row board-head">
+                <div class="board-title">Мои задачи 2</div>
+                <button type="button" class="simple">
+                    <i class='bx bx-cog' ></i>
+                </button>
+            </div>
+            <div class="tasks">
+                
+            </div>
+        </div>
+        <div id="board-3" class="flex-column board">
+            <div class="flex-row board-head">
+                <div class="board-title">Мои задачи 3</div>
+                <button type="button" class="simple">
+                    <i class='bx bx-cog' ></i>
+                </button>
+            </div>
+            <div class="tasks">
+
+            </div>
+        </div>
     </div>
 </body>
 </html>

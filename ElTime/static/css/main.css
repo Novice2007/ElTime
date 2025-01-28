@@ -3,7 +3,8 @@
     margin: 0;
     font-family: "Comfortaa", sans-serif;
     outline: none;
-    transition: .5s;
+    text-decoration: none;
+    transition: .15s;
 }
 
 header {
@@ -44,10 +45,17 @@ body {
 }
 
 .flex-row-centered {
+    display: flex;
+    align-items: center;
+    gap: 15px;
     justify-content: center;
 }
 
 .flex-column-centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
     align-content: center;
 }
 

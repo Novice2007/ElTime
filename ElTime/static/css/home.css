@@ -24,6 +24,10 @@ header h1 {
     margin-bottom: 15px;
 }
 
+.tasks {
+    width: 100%;
+}
+
 .task, .create-task {
     display: grid;
     grid-template-columns: 150px auto 75px 50px;

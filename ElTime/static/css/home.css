@@ -41,10 +41,24 @@ header h1 {
 }
 
 .create-task {
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    grid-template-columns: 150px auto 155px 50px;
     padding: 0;
     margin-top: 15px;
     padding-top: 15px;
     border-top: 1px dashed var(--interface-main-color);
+    gap: 3px;
+}
+
+.create-task .row {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 150px auto 155px 50px;
+    gap: 15px;
+    font-size: .8rem;
+}
+
+.create-task .row p {
+    padding-left: 5px;
 }

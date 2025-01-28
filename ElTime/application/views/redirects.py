@@ -13,6 +13,8 @@ from django.contrib.auth import (
 from django.db.utils import IntegrityError
 from django.contrib.auth.models import User
 
+from ..models import Board
+
 from .pages import (
     welcome,
     home,
@@ -68,7 +70,15 @@ def registrate(
         user.save()
         login(request, user)
 
-        return to_home(request)
+        Board.objects.create(
+            user=user,
+            name="Мои задачи"
+        )
+
+        return to_home(
+            request,
+            user__login=user.username
+        )
     except IntegrityError:
         return to_welcome(
             request,
@@ -99,7 +109,10 @@ def auth(
     if user is not None:
         login(request=request, user=user)
 
-        return to_home(request)
+        return to_home(
+            request,
+            user__login=user.username
+        )
     
     return to_welcome(
         request,

@@ -1,4 +1,4 @@
-function createTask(title, content, deadline) {
+function createTask(boardTitle, title, content, deadline) {
     if ([title, content, deadline].some(value => value == "")) {
         return {
             taskElement: null,
@@ -27,30 +27,91 @@ function createTask(title, content, deadline) {
     taskElement.appendChild(contentElement);
     taskElement.appendChild(deadlineElement);
 
+
+    function getTitleElement() {
+        return titleElement;
+    }
+
+    function setTitle(value) {
+        titleElement.innerText = value;
+    }
+
+    function getContentElement() {
+        return contentElement;
+    }
+
+    function setContent(value) {
+        contentElement.innerText = value;
+    }
+
+    function getDeadlineElement() {
+        return deadlineElement;
+    }
+
+    function setDeadline(value) {
+        deadlineElement.innerText = value;
+    }
+
     
     const completeTaskButtonElement = document.createElement("button");
     
     completeTaskButtonElement.type = "button";
     completeTaskButtonElement.className = "simple";
-    
-    const completeTaskButtonContentElement = document.createElement("i");
+    completeTaskButtonElement.innerHTML = "<i class='bx bx-check'></i>";
 
-    completeTaskButtonContentElement.className = "bx bx-check";
+    completeTaskButtonElement.addEventListener(
+        "click",
+        async () => {
+            const { data, status } = await request.post(
+                API + "tasks/delete/",
+                JSON.stringify({
+                    board: boardTitle,
+                    task: {
+                        title: titleElement.textContent || "",
+                        content: contentElement.textContent || "",
+                        deadline: deadlineElement.textContent || ""
+                    }
+                })
+            )
 
-    completeTaskButtonElement.appendChild(completeTaskButtonContentElement);
+            if (status == 204) {
+                return taskElement.remove();
+            }
+            
+            return alert("Ошибка создания задачи :(");
+        }
+    )
 
     taskElement.appendChild(completeTaskButtonElement);
 
     return {
         taskElement: taskElement,
-        status: true
+        status: true,
+        getTitleElement: getTitleElement,
+        setTitle: setTitle,
+        getContentElement: getContentElement,
+        setContent: setContent,
+        getDeadlineElement: getDeadlineElement,
+        setDeadline: setDeadline,
     }
 }
 
-function createCreationTaskForm(boardId) {
+function createCreationTaskForm(boardId, boardTitle) {
     const element = document.createElement("div");
     element.className = "create-task";
     
+    const headersElement = document.createElement("div");
+    headersElement.className = "row";
+
+    headersElement.innerHTML = `<p>Заголовок</p>
+                <p>Описание задачи</p>
+                <p>Дедлайн</p>`;
+    
+    element.appendChild(headersElement);
+    
+    const controllersElement = document.createElement("div");
+    controllersElement.className = "row";
+
     const title = document.createElement("input");
     title.type = "text";
     title.className = "create-title";
@@ -89,22 +150,43 @@ function createCreationTaskForm(boardId) {
     createButton.className = "simple";
     createButton.innerHTML = "<i class='bx bx-plus-circle'></i>";
     
-    element.appendChild(title);
-    element.appendChild(content);
-    element.appendChild(deadline);
-    element.appendChild(createButton);
+    controllersElement.appendChild(title);
+    controllersElement.appendChild(content);
+    controllersElement.appendChild(deadline);
+    controllersElement.appendChild(createButton);
     
-    createButton.onclick = () => {
-        const { taskElement, status } = createTask(...Object.values(getContent()));
+    element.appendChild(controllersElement);
+
+    createButton.onclick = async () => {
+        const {
+            taskElement,
+            status,
+        } = createTask(boardTitle, ...Object.values(getContent()));
         
         if (status) {
-            document.getElementById(boardId)
-                .getElementsByClassName("tasks")[0]
-                .appendChild(taskElement);
-            
-            clear();
-            title.focus();
-            return
+            const response = await request.post(
+                API + "tasks/create/",
+                JSON.stringify({
+                    board: boardTitle,
+                    task: {
+                        title: title.value || "",
+                        content: content.value || "",
+                        deadline: deadline.value || ""
+                    },
+                })
+            )
+
+            if (response.status == 201) {
+                document.getElementById(boardId)
+                    .getElementsByClassName("tasks")[0]
+                    .appendChild(taskElement);
+                
+                clear();
+                title.focus();
+                return
+            }
+
+            return alert("Ошибка синхронизации с сервером :(");
         }
         
         alert("Необходимо заполнить все поля!");
@@ -159,6 +241,7 @@ function createBoard(title, tasks) {
     tasks.forEach(task => {
         tasksElement.appendChild(
             createTask(
+                title,
                 task.title,
                 task.content,
                 task.deadline
@@ -169,32 +252,53 @@ function createBoard(title, tasks) {
     boardElement.appendChild(tasksElement);
 
 
-    const creationTaskForm = createCreationTaskForm(boardElement.id);
+    const creationTaskForm = createCreationTaskForm(boardElement.id, title);
 
     boardElement.appendChild(creationTaskForm);
 
     return boardElement;
 }
 
-const fetchBoards = async (apiRoot) => {
-    try {
-        const response = await fetch(apiRoot + "boards/");
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
+/************************** data **************************/
 
-        const json = await response.json();
 
-        return json;
-    } catch (error) {
-        console.error('Error fetching boards:', error);
+const fetchWithJSON = async (url, method="GET", objectData="{}") => {
+    let response;
+    
+    if (["head", "get"].includes(method.toLowerCase())) {
+        response = await fetch(url);
+    } else {
+        response = await fetch(
+            url,
+            {
+                method: method,
+                body: JSON.stringify(objectData),
+            }
+        );
     }
+
+    if (!response.ok) {
+        console.error(`Error fetching ${url}: ${response.status}`);
+        return { data: null, status: response.status };
+    }
+
+    return { data: await response.json(), status: response.status };
 }
+
+const fetchBoards = async (apiRoot) => {
+    return (await request.get(apiRoot + "boards/")).data
+}
+
 
 /************************** main **************************/
 
 const API = "http://127.0.0.1:8080/api/v1/";
+
+const request = axios.create({
+    baseURL: API,
+    withCredentials: true,
+});
 
 async function main() {
     const boards = (await fetchBoards(API)).boards;

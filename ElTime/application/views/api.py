@@ -71,7 +71,7 @@ def create_board(
         name=board_name
     )
 
-    return HttpResponse(204)
+    return HttpResponse(status=204)
 
 
 @csrf_exempt
@@ -102,7 +102,7 @@ def delete_board(
 
     if existing_board:
         existing_board.delete()
-        return HttpResponse(204)
+        return HttpResponse(status=204)
     
     return HttpResponse(
         f"Not found the board with \"{\

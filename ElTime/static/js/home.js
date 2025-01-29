@@ -1,3 +1,14 @@
+/**
+ * Creates a DOM element for task visualization & manipulation
+ * 
+ * @param {string} boardTitle Board title
+ * @param {string} title Task title
+ * @param {string} content Task content
+ * @param {string} deadline Task deadline date
+ * 
+ * @returns {HTMLDivElement} An element representing task visualisation and
+ *                              its manipulation
+ */
 function createTask(boardTitle, title, content, deadline) {
     if ([title, content, deadline].some(value => value === "")) {
         return {
@@ -62,7 +73,7 @@ function createTask(boardTitle, title, content, deadline) {
     completeTaskButtonElement.addEventListener(
         "click",
         async () => {
-            const { data, status } = await request.post(
+            const { status } = await request.post(
                 API + "tasks/delete/",
                 JSON.stringify({
                     board: boardTitle,
@@ -96,6 +107,15 @@ function createTask(boardTitle, title, content, deadline) {
     }
 }
 
+
+/**
+ * Creates a DOM element to tasks creating
+ * 
+ * @param {string} boardId DOM element board id
+ * @param {string} boardTitle Board title
+ * 
+ * @returns {HTMLDivElement} An element to creating tasks for the board
+ */
 function createCreationTaskForm(boardId, boardTitle) {
     const element = document.createElement("div");
     element.className = "create-task";
@@ -174,7 +194,7 @@ function createCreationTaskForm(boardId, boardTitle) {
                         deadline: deadline.value || ""
                     },
                 })
-            )
+            );
 
             if (response.status === 201) {
                 document.getElementById(boardId)
@@ -201,6 +221,8 @@ function createCreationTaskForm(boardId, boardTitle) {
  * 
  * @param {string} title Board title
  * @param {Object[]} tasks Array of tasks
+ * 
+ * @returns {HTMLDivElement} Board DOM element
  */
 function createBoard(title, tasks=[]) {
     const boardElement = document.createElement("div");
@@ -220,12 +242,26 @@ function createBoard(title, tasks=[]) {
     const configBoardButtonElement = document.createElement("button");
     configBoardButtonElement.type = "button";
     configBoardButtonElement.className = "simple";
-    configBoardButtonElement.innerHTML = "<i class='bx bx-cog' ></i>";
+    configBoardButtonElement.innerHTML = "<i class='bx bx-trash' ></i>";
 
     configBoardButtonElement.addEventListener(
         "click",
-        () => {
-            console.log("Clicked", title, "settings button");
+        async () => {
+            if (confirm(`
+                Уверены, что хотите удалить борд "${title}"?
+                Восстановить его будет невозможно!`
+            )) {
+                const deleteResponse = await request.post(
+                    API + "boards/delete/",
+                    JSON.stringify({board: title})
+                );
+
+                if (deleteResponse.status === 204) {
+                    return boardElement.remove();
+                }
+                
+                alert("Ошибка! Каким-то образом вы пытаетесь удалить несуществующий борд");
+            }
         }
     )
 

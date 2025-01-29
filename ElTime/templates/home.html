@@ -61,7 +61,7 @@
             "click",
             () => {
                 createBoardPreviewButton.style.display = "none";
-                
+
                 createForm.style.display = "flex";
                 creationFormBoardNameInput.focus();
             }
@@ -90,6 +90,13 @@
             "click",
             async () => {
                 const newBoardName = creationFormBoardNameInput.value;
+
+                if (newBoardName.trim() === "") {
+                    creationFormBoardNameInput.value = "";
+                    creationFormBoardNameInput.focus();
+
+                    return alert("Необходимо указать название для борда");
+                }
 
                 const response = await request.post(
                     API + "boards/create/",

@@ -78,6 +78,10 @@ input {
     border: 1px solid var(--interface-main-color);
 }
 
+input:focus {
+    background-color: var(--interface-main-background);
+}
+
 .horizontal-separator {
     height: 0;
     border: none;

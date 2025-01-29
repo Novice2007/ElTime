@@ -1,5 +1,16 @@
+/**
+ * Creates a DOM element for task visualization & manipulation
+ * 
+ * @param {string} boardTitle Board title
+ * @param {string} title Task title
+ * @param {string} content Task content
+ * @param {string} deadline Task deadline date
+ * 
+ * @returns {HTMLDivElement} An element representing task visualisation and
+ *                              its manipulation
+ */
 function createTask(boardTitle, title, content, deadline) {
-    if ([title, content, deadline].some(value => value == "")) {
+    if ([title, content, deadline].some(value => value === "")) {
         return {
             taskElement: null,
             status: false
@@ -62,7 +73,7 @@ function createTask(boardTitle, title, content, deadline) {
     completeTaskButtonElement.addEventListener(
         "click",
         async () => {
-            const { data, status } = await request.post(
+            const { status } = await request.post(
                 API + "tasks/delete/",
                 JSON.stringify({
                     board: boardTitle,
@@ -74,7 +85,7 @@ function createTask(boardTitle, title, content, deadline) {
                 })
             )
 
-            if (status == 204) {
+            if (status === 204) {
                 return taskElement.remove();
             }
             
@@ -96,6 +107,15 @@ function createTask(boardTitle, title, content, deadline) {
     }
 }
 
+
+/**
+ * Creates a DOM element to tasks creating
+ * 
+ * @param {string} boardId DOM element board id
+ * @param {string} boardTitle Board title
+ * 
+ * @returns {HTMLDivElement} An element to creating tasks for the board
+ */
 function createCreationTaskForm(boardId, boardTitle) {
     const element = document.createElement("div");
     element.className = "create-task";
@@ -148,7 +168,7 @@ function createCreationTaskForm(boardId, boardTitle) {
 
     const createButton = document.createElement("button");
     createButton.className = "simple";
-    createButton.innerHTML = "<i class='bx bx-plus-circle'></i>";
+    createButton.innerHTML = "<i class='bx bx-message-square-add' ></i>";
     
     controllersElement.appendChild(title);
     controllersElement.appendChild(content);
@@ -174,9 +194,9 @@ function createCreationTaskForm(boardId, boardTitle) {
                         deadline: deadline.value || ""
                     },
                 })
-            )
+            );
 
-            if (response.status == 201) {
+            if (response.status === 201) {
                 document.getElementById(boardId)
                     .getElementsByClassName("tasks")[0]
                     .appendChild(taskElement);
@@ -201,8 +221,10 @@ function createCreationTaskForm(boardId, boardTitle) {
  * 
  * @param {string} title Board title
  * @param {Object[]} tasks Array of tasks
+ * 
+ * @returns {HTMLDivElement} Board DOM element
  */
-function createBoard(title, tasks) {
+function createBoard(title, tasks=[]) {
     const boardElement = document.createElement("div");
     boardElement.id = title
         .toLowerCase()
@@ -220,12 +242,26 @@ function createBoard(title, tasks) {
     const configBoardButtonElement = document.createElement("button");
     configBoardButtonElement.type = "button";
     configBoardButtonElement.className = "simple";
-    configBoardButtonElement.innerHTML = "<i class='bx bx-cog' ></i>";
+    configBoardButtonElement.innerHTML = "<i class='bx bx-trash' ></i>";
 
     configBoardButtonElement.addEventListener(
         "click",
-        () => {
-            console.log("Clicked", title, "settings button");
+        async () => {
+            if (confirm(`
+                Уверены, что хотите удалить борд "${title}"?
+                Восстановить его будет невозможно!`
+            )) {
+                const deleteResponse = await request.post(
+                    API + "boards/delete/",
+                    JSON.stringify({board: title})
+                );
+
+                if (deleteResponse.status === 204) {
+                    return boardElement.remove();
+                }
+                
+                alert("Ошибка! Каким-то образом вы пытаетесь удалить несуществующий борд");
+            }
         }
     )
 
@@ -260,37 +296,6 @@ function createBoard(title, tasks) {
 }
 
 
-/************************** data **************************/
-
-
-const fetchWithJSON = async (url, method="GET", objectData="{}") => {
-    let response;
-    
-    if (["head", "get"].includes(method.toLowerCase())) {
-        response = await fetch(url);
-    } else {
-        response = await fetch(
-            url,
-            {
-                method: method,
-                body: JSON.stringify(objectData),
-            }
-        );
-    }
-
-    if (!response.ok) {
-        console.error(`Error fetching ${url}: ${response.status}`);
-        return { data: null, status: response.status };
-    }
-
-    return { data: await response.json(), status: response.status };
-}
-
-const fetchBoards = async (apiRoot) => {
-    return (await request.get(apiRoot + "boards/")).data
-}
-
-
 /************************** main **************************/
 
 const API = "http://127.0.0.1:8080/api/v1/";
@@ -298,10 +303,13 @@ const API = "http://127.0.0.1:8080/api/v1/";
 const request = axios.create({
     baseURL: API,
     withCredentials: true,
+    headers: {
+        "Access-Control-Allow-Origin": "*"
+    }
 });
 
 async function main() {
-    const boards = (await fetchBoards(API)).boards;
+    const boards = (await request.get(API + "boards/")).data.boards;
 
     const boardsElement = document.getElementById("boards");
 

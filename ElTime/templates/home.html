@@ -56,6 +56,36 @@
         const createBoardButton = document
             .getElementById("createBoardButton");
         
+        
+        const tryCreateBoard = async () => {
+            const newBoardName = creationFormBoardNameInput.value;
+
+            if (newBoardName.trim() === "") {
+                creationFormBoardNameInput.value = "";
+                creationFormBoardNameInput.focus();
+
+                return alert("Необходимо указать название для борда");
+            }
+
+            const response = await request.post(
+                API + "boards/create/",
+                JSON.stringify({
+                    board: newBoardName
+                })
+            );
+
+            if (response.status === 409) {
+                return alert("Борд с таким названием уже существует");
+            }
+
+            const newBoard = createBoard(newBoardName);
+
+            document.getElementById("boards").appendChild(newBoard);
+            newBoard.getElementsByClassName("row")[1].children[0].focus();
+
+            creationFormBoardNameInput.value = "";
+        }
+
 
         createBoardPreviewButton.addEventListener(
             "click",
@@ -86,35 +116,18 @@
             }
         )
 
+        creationFormBoardNameInput.addEventListener(
+            "keypress",
+            async (event) => {
+                if (event.key === "Enter") {
+                    await tryCreateBoard();
+                }
+            }
+        )
+
         createBoardButton.addEventListener(
             "click",
-            async () => {
-                const newBoardName = creationFormBoardNameInput.value;
-
-                if (newBoardName.trim() === "") {
-                    creationFormBoardNameInput.value = "";
-                    creationFormBoardNameInput.focus();
-
-                    return alert("Необходимо указать название для борда");
-                }
-
-                const response = await request.post(
-                    API + "boards/create/",
-                    JSON.stringify({
-                        board: newBoardName
-                    })
-                );
-
-                if (response.status === 409) {
-                    return alert("Борд с таким названием уже существует");
-                }
-
-                document.getElementById("boards").appendChild(
-                    createBoard(newBoardName)
-                );
-                creationFormBoardNameInput.value = "";
-                creationFormBoardNameInput.focus();
-            }
+            tryCreateBoard
         )
 
     </script>

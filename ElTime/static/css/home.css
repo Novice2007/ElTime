@@ -3,7 +3,7 @@ header h1 {
 }
 
 #boards {
-    padding: 50px 0;
+    padding: 50px 0 15px;
     position: relative;
     left: 50%;
     transform: translateX(-50%);
@@ -61,4 +61,31 @@ header h1 {
 
 .create-task .row p {
     padding-left: 5px;
+}
+
+.create-board {
+    display: flex;
+    justify-content: center;
+}
+
+.create-board .preview button {
+    display: flex;
+    gap: 15px;
+}
+
+.create-board .preview button .horizontal-line {
+    align-self: center;
+    height: 0;
+    width: 200px;
+    border-top: 1px solid gray;
+}
+
+.create-board .preview button:hover .horizontal-line {
+    border-color: var(--interface-main-color);
+}
+
+.create-board .create-form {
+    display: flex;
+    gap: 15px;
+    align-content: center;
 }

@@ -26,7 +26,7 @@ class Board(models.Model):
         verbose_name_plural = ("Boards")
     
     def __str__(self) -> str:
-        return f"{self.user.pk} - {self.user.username} - {self.name}"
+        return f"<{self.user.pk}:{self.user.username}> - {self.name}"
 
 
 class Task(models.Model):

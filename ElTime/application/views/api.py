@@ -43,22 +43,73 @@ def boards(
     return JsonResponse(context)
 
 
+@csrf_exempt
 def create_board(
     request: HttpRequest
 ) -> HttpResponse:
-    ...
+    """
+    `request.body`:
+    {
+        "board": <board_name>,
+    }
+    """
+
+    board_name: str = json.loads(request.body)\
+        .get("board")
+
+    if Board.objects.filter(
+        user=request.user,
+        name=board_name
+    ).count() > 0:
+        return HttpResponse(
+            "Busy board name",
+            status=409
+        )
+    
+    Board.objects.create(
+        user=request.user,
+        name=board_name
+    )
+
+    return HttpResponse(204)
 
 
+@csrf_exempt
 def update_board(
     request: HttpRequest
 ) -> HttpResponse:
     ...
 
 
+@csrf_exempt
 def delete_board(
     request: HttpRequest
 ) -> HttpResponse:
-    ...
+    """
+    `request.body`:
+    {
+        "board": <board_name>,
+    }
+    """
+
+    board_name: str = json.loads(request.body)\
+        .get("board")
+
+    existing_board = Board.objects.get(
+        user=request.user,
+        name=board_name
+    )
+
+    if existing_board:
+        existing_board.delete()
+        return HttpResponse(204)
+    
+    return HttpResponse(
+        f"Not found the board with \"{\
+            board_name\
+        }\" name",
+        404
+    )
 
 
 @csrf_exempt

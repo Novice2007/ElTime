@@ -30,6 +30,86 @@
             <a href="#">{{ request.session.user.login }}</a>
         </div>
     </header>
+
     <div id="boards" class="flex-column boards"></div>
+    <div class="create-board">
+        <div class="preview">
+            <button type="button" class="simple" id="createBoardPreviewButton" style="display: flex;">
+                <div class="horizontal-line"></div>
+                <i class='bx bx-plus-circle'></i>
+                <div class="horizontal-line"></div>
+            </button>
+        </div>
+        <div id="create-form" style="display: none;">
+            <input placeholder="Название борда:" type="text" name="board_name" id="board_name">
+            <button type="button" class="simple" id="createBoardButton">создать</button>
+        </div>
+    </div>
+    <script defer>
+
+        const createBoardPreviewButton = document
+            .getElementById("createBoardPreviewButton");
+        const createForm = document
+            .getElementById("create-form");
+        const creationFormBoardNameInput = document
+            .getElementById("board_name");
+        const createBoardButton = document
+            .getElementById("createBoardButton");
+        
+
+        createBoardPreviewButton.addEventListener(
+            "click",
+            () => {
+                createBoardPreviewButton.style.display = "none";
+                
+                createForm.style.display = "flex";
+                creationFormBoardNameInput.focus();
+            }
+        )
+
+        document.addEventListener(
+            "click",
+            (event) => {
+                const isCreatingElement = [
+                    createBoardPreviewButton,
+                    createBoardPreviewButton.getElementsByClassName(
+                        "bx bx-plus-circle"
+                    )[0],
+                    creationFormBoardNameInput,
+                    createBoardButton,
+                ].includes(event.target);
+
+                if (!isCreatingElement) {
+                    createForm.style.display = "none";
+                    createBoardPreviewButton.style.display = "flex";
+                }
+            }
+        )
+
+        createBoardButton.addEventListener(
+            "click",
+            async () => {
+                const newBoardName = creationFormBoardNameInput.value;
+
+                const response = await request.post(
+                    API + "boards/create/",
+                    JSON.stringify({
+                        board: newBoardName
+                    })
+                );
+
+                if (response.status === 409) {
+                    return alert("Борд с таким названием уже существует");
+                }
+
+                document.getElementById("boards").appendChild(
+                    createBoard(newBoardName)
+                );
+                creationFormBoardNameInput.value = "";
+                creationFormBoardNameInput.focus();
+            }
+        )
+
+    </script>
 </body>
 </html>

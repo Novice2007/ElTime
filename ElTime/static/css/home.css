@@ -30,7 +30,7 @@ header h1 {
 
 .task, .create-task {
     display: grid;
-    grid-template-columns: 150px auto 75px 50px;
+    grid-template-columns: 150px auto 90px 50px;
     gap: 15px;
     align-items: center;
     padding: 15px 0 15px 10px;

@@ -239,37 +239,42 @@ function createBoard(title, tasks=[]) {
     boardTitleElement.className = "board-title";
     boardTitleElement.innerText = title;
 
-    const configBoardButtonElement = document.createElement("button");
-    configBoardButtonElement.type = "button";
-    configBoardButtonElement.className = "simple";
-    configBoardButtonElement.innerHTML = "<i class='bx bx-trash' ></i>";
-
-    configBoardButtonElement.addEventListener(
-        "click",
-        async () => {
-            if (confirm(`
-                Уверены, что хотите удалить борд "${title}"?
-                Восстановить его будет невозможно!`
-            )) {
-                const deleteResponse = await request.post(
-                    API + "boards/delete/",
-                    JSON.stringify({board: title})
-                );
-
-                if (deleteResponse.status === 204) {
-                    return boardElement.remove();
-                }
-                
-                alert("Ошибка! Каким-то образом вы пытаетесь удалить несуществующий борд");
-            }
-        }
-    )
-
     boardHeadElement.appendChild(boardTitleElement);
-    boardHeadElement.appendChild(configBoardButtonElement);
+
+    if (title !== "Мои задачи") {
+        const deleteBoardButtonElement = document.createElement("button");
+        deleteBoardButtonElement.type = "button";
+        deleteBoardButtonElement.className = "simple";
+        deleteBoardButtonElement.innerHTML = "<i class='bx bx-trash' ></i>";
+    
+        deleteBoardButtonElement.addEventListener(
+            "click",
+            async () => {
+                if (confirm(
+                    `Уверены, что хотите удалить борд "${title}"?\n\n` +
+                    "Восстановить его будет НЕВОЗМОЖНО!"
+                )) {
+                    const deleteResponse = await request.post(
+                        API + "boards/delete/",
+                        JSON.stringify({board: title})
+                    );
+    
+                    if (deleteResponse.status === 204) {
+                        return boardElement.remove();
+                    }
+                    
+                    alert("Ошибка! Каким-то образом вы пытаетесь удалить несуществующий борд");
+                }
+            }
+        )
+
+        boardHeadElement.appendChild(deleteBoardButtonElement);
+    } else {
+        boardTitleElement.style.paddingBottom = "15px";
+    }
 
     boardElement.appendChild(boardHeadElement);
-
+    
 
     const tasksElement = document.createElement("div");
     tasksElement.className = "tasks";

@@ -12,7 +12,7 @@ from ..models import (
     Task,
 )
 
-import datetime, json
+import json
 
 
 def boards(
@@ -177,8 +177,6 @@ def update_task(
 
     body: dict[str, str | dict[str, str]] =\
         json.loads(request.body)
-    
-    print(f"Got body: {body}")
 
     board: Board = Board.objects.get(
         user=request.user,

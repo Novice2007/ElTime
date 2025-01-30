@@ -24,9 +24,9 @@ function runTaskEditing(board, taskElement, raisedElement) {
         return input;
     }
 
-    const titleInput = createInput("title", initialState.title);    
-    const deadlineInput = createInput("deadline", initialState.deadline);
-    
+    const titleInput = createInput("title", initialState.title);
+    titleInput.maxLength = "50";
+
     const contentTextarea = document.createElement("textarea");
     contentTextarea.style.height = "250px";
     contentTextarea.style.resize = "vertical";
@@ -34,6 +34,7 @@ function runTaskEditing(board, taskElement, raisedElement) {
     contentTextarea.value = initialState.content;
     contentTextarea.className = "content";
 
+    const deadlineInput = createInput("deadline", initialState.deadline);
     deadlineInput.type = "date";
     deadlineInput.className += " edit-deadline";
 
@@ -41,9 +42,9 @@ function runTaskEditing(board, taskElement, raisedElement) {
         replacingRowElement.appendChild(element);
 
         element.addEventListener(
-            "keypress",
+            "keydown",
             async (event) => {
-                if (event.key === "Enter" && element !== contentTextarea) {
+                if (event.key === "Enter" && !event.shiftKey) {
                     await requestUpdateTask();
                 }
             }
@@ -96,9 +97,9 @@ function runTaskEditing(board, taskElement, raisedElement) {
                     deadline: initialState.deadline
                 },
                 new: {
-                    title: titleInput.value,
-                    content: contentTextarea.value,
-                    deadline: deadlineInput.value
+                    title: titleInput.value.trim(),
+                    content: contentTextarea.value.trim(),
+                    deadline: deadlineInput.value.trim()
                 },
             })
         );
@@ -283,6 +284,7 @@ function createCreationTaskForm(boardId, boardTitle) {
     controllersElement.style.alignItems = "flex-start";
 
     const title = document.createElement("input");
+    title.maxLength = "50";
     title.type = "text";
     title.className = "create-title";
     title.id = "title";
@@ -300,12 +302,26 @@ function createCreationTaskForm(boardId, boardTitle) {
     deadline.className = "create-deadline";
     deadline.id = "deadline";
     deadline.name = "deadline";
+
+    setTodaysDate();
+
     
+    function setTodaysDate() {
+        const today = new Date();
+    
+        deadline.value = `${
+            today.getFullYear()
+        }-${
+            String(today.getMonth() + 1).padStart(2, '0')
+        }-${
+            String(today.getDate()).padStart(2, '0')
+        }`;
+    }
 
     function clear() {
         title.value = "";
         content.value = "";
-        deadline.value = "";
+        setTodaysDate();
     }
 
     function getContent() {

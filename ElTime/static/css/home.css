@@ -41,8 +41,14 @@ header h1 {
     margin: -2px 0;
 }
 
-.task p, textarea {
-    line-height: 10px;
+.task p {
+    line-height: 20px;
+}
+
+textarea {
+    height: 83px;
+    font-size: .8rem;
+    line-height: 20px;
 }
 
 .task, .create-task p {

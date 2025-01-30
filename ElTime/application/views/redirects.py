@@ -13,7 +13,10 @@ from django.contrib.auth import (
 from django.db.utils import IntegrityError
 from django.contrib.auth.models import User
 
-from ..models import Board
+from ..models import (
+    Board,
+    Task
+)
 
 from .pages import (
     welcome,
@@ -70,9 +73,13 @@ def registrate(
         user.save()
         login(request, user)
 
-        Board.objects.create(
-            user=user,
-            name="Мои задачи"
+        Task.objects.create(
+            board=Board.objects.create(
+                user=user,
+                name="Мои задачи"
+            ),
+            title="ЗОЖ",
+            content="Лечь спать пораньше <3"
         )
 
         return to_home(

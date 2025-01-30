@@ -66,6 +66,10 @@ button.simple:hover, a:hover {
     color: var(--base-button-text-color);
 }
 
+button.simple:focus i, a:focus, a:focus i {
+    color: var(--interface-main-color);
+}
+
 .input {
     display: flex;
     flex-direction: column;
@@ -73,12 +77,17 @@ button.simple:hover, a:hover {
     gap: 5px;
 }
 
-input {
-    padding: 15px 15px;
+input, textarea {
+    padding: 15px;
     border: 1px solid var(--interface-main-color);
 }
 
-input:focus {
+textarea {
+    height: 13px;
+    min-height: 13px;
+}
+
+input:focus, textarea:focus {
     background-color: var(--interface-main-background);
 }
 

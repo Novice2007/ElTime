@@ -30,14 +30,36 @@ header h1 {
 
 .task, .create-task {
     display: grid;
-    grid-template-columns: 150px auto 75px 50px;
+    grid-template-columns: 150px calc(100% - 320px) 75px 50px;
     gap: 15px;
-    align-items: center;
+    align-items: flex-start;
     padding: 15px 0 15px 10px;
+}
+
+.task button.simple {
+    padding: 0 15px;
+    margin: -2px 0;
+}
+
+.task p, textarea {
+    line-height: 10px;
+}
+
+.task, .create-task p {
+    word-wrap: break-word;
 }
 
 .task:hover {
     background-color: var(--interface-main-background);
+}
+
+.editing-row {
+    width: calc(100% - 15px);
+    padding-left: 15px;
+    display: grid;
+    grid-template-columns: 150px auto 155px 50px;
+    gap: 15px;
+    font-size: .8rem;
 }
 
 .create-task {
@@ -80,7 +102,8 @@ header h1 {
     border-top: 1px solid gray;
 }
 
-.create-board .preview button:hover .horizontal-line {
+.create-board .preview button:hover .horizontal-line,
+.create-board .preview button:focus .horizontal-line {
     border-color: var(--interface-main-color);
 }
 

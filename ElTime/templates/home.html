@@ -83,6 +83,9 @@
             document.getElementById("boards").appendChild(newBoard);
             newBoard.getElementsByClassName("row")[1].children[0].focus();
 
+            createForm.style.display = "none";
+            createBoardPreviewButton.style.display = "flex";
+
             creationFormBoardNameInput.value = "";
         }
 

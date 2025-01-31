@@ -15,6 +15,7 @@ from ..models import (
 import datetime, json
 
 
+@csrf_exempt
 def boards(
     request: HttpRequest
 ) -> JsonResponse:

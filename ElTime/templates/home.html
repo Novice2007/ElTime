@@ -8,9 +8,9 @@
     <title>Home</title>
     <link rel="icon" href="{% static '/images/favicon.ico' %}">
 
-    <link rel="stylesheet" href="{% static '/css/home.css' %}">
     <link rel="stylesheet" href="{% static '/css/main.css' %}">
     <link rel="stylesheet" href="{% static '/css/elements.css' %}">
+    <link rel="stylesheet" href="{% static '/css/home.css' %}">
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script defer async src="{% static '/js/home.js' %}"></script>
@@ -24,10 +24,10 @@
 </head>
 <body>
     <header>
-        <h1>ElTime</h1>
+        <h1>ElTime - {{ request.session.user.login }}</h1>
         <div class="flex-row">
             <a href="/logout">выйти</a>
-            <a href="#">{{ request.session.user.login }}</a>
+            <!-- <a href="#">{{ request.session.user.login }}</a> -->
         </div>
     </header>
 
@@ -82,6 +82,9 @@
 
             document.getElementById("boards").appendChild(newBoard);
             newBoard.getElementsByClassName("row")[1].children[0].focus();
+
+            createForm.style.display = "none";
+            createBoardPreviewButton.style.display = "flex";
 
             creationFormBoardNameInput.value = "";
         }

@@ -12,7 +12,7 @@ from ..models import (
     Task,
 )
 
-import datetime, json
+import json
 
 
 @csrf_exempt
@@ -109,7 +109,7 @@ def delete_board(
         f"Not found the board with \"{\
             board_name\
         }\" name",
-        404
+        status=404
     )
 
 
@@ -129,8 +129,6 @@ def create_task(
         }
     }
     """
-
-    print(f"{request.body.decode() = }")
 
     body: dict[str, str | dict[str, str]] =\
         json.loads(request.body)
@@ -189,33 +187,29 @@ def update_task(
     previous_task = body.get("previous")
     new_task = body.get("new")
 
-    try:
-        task: Task = Task.objects.filter(
-            board=board.pk,
-            title=previous_task.get("title"),
-            content=previous_task.get("content"),
-            deadline_date=previous_task.get("deadline")
-        ).first()
+    task: Task = Task.objects.filter(
+        board=board.pk,
+        title=previous_task.get("title"),
+        content=previous_task.get("content"),
+        deadline_date=previous_task.get("deadline")
+    ).first()
 
-        task.title = new_task.get("title")
-        task.content = new_task.get("content")
-        task.deadline_date = new_task.get("deadline")
+    task.title = new_task.get("title")
+    task.content = new_task.get("content")
+    task.deadline_date = new_task.get("deadline")
 
-        task.save()
+    task.save()
 
-        return JsonResponse(
-            {
-                "title": task.title,
-                "content": task.content,
-                "deadline": str(
-                    task.deadline_date
-                )
-            },
-            202
-        )
-    except Exception as ex:
-        print(Exception)
-        return HttpResponse(ex, 500)
+    return JsonResponse(
+        {
+            "title": task.title,
+            "content": task.content,
+            "deadline": str(
+                task.deadline_date
+            )
+        },
+        status=202
+    )
 
 
 @csrf_exempt
@@ -234,8 +228,6 @@ def delete_task(
         }
     }
     """
-
-    print(f"{request.body.decode() = }")
 
     body: dict[str, str | dict[str, str]] =\
         json.loads(request.body.decode())

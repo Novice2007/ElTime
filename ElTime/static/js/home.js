@@ -1,4 +1,149 @@
 /**
+ * Creates task edition form and switched with task element untill changes cancelled or applyed
+ * 
+ * @param {string} board Board title
+ * @param {HTMLDivElement} taskElement An element which will be temporary changed with its function result
+ * @param {HTMLParagraphElement} raisedElement The element raised task editing
+ */
+function runTaskEditing(board, taskElement, raisedElement) {
+    const initialState = {
+        title: taskElement.getElementsByClassName("title")[0].innerText,
+        content: taskElement.getElementsByClassName("content")[0].innerText,
+        deadline: taskElement.getElementsByClassName("deadline")[0].innerText
+    }
+
+    const replacingRowElement = document.createElement("div");
+    replacingRowElement.className = "task editing-row";
+
+
+    const createInput = (className, value) => {
+        const input = document.createElement("input");
+        input.value = value;
+        input.className = className;
+
+        return input;
+    }
+
+    const titleInput = createInput("title", initialState.title);
+    titleInput.maxLength = "50";
+
+    const contentTextarea = document.createElement("textarea");
+    contentTextarea.style.height = "250px";
+    contentTextarea.style.resize = "vertical";
+    contentTextarea.maxLength = "512";
+    contentTextarea.value = initialState.content;
+    contentTextarea.className = "content";
+
+    const deadlineInput = createInput("deadline", initialState.deadline);
+    deadlineInput.type = "date";
+    deadlineInput.className += " edit-deadline";
+
+    [titleInput, contentTextarea, deadlineInput].forEach(element => {
+        replacingRowElement.appendChild(element);
+
+        element.addEventListener(
+            "keydown",
+            async (event) => {
+                if (event.key === "Enter" && !event.shiftKey) {
+                    await requestUpdateTask();
+                }
+            }
+        )
+    });
+
+    taskElement.style.display = "none";
+    taskElement.before(replacingRowElement);
+
+    replacingRowElement
+        .getElementsByClassName(raisedElement.className)[0].focus();
+
+
+    const completeTaskEditingButtonElement = document.createElement("button");
+
+    completeTaskEditingButtonElement.type = "button";
+    completeTaskEditingButtonElement.className = "simple";
+    completeTaskEditingButtonElement.innerHTML = "<i class='bx bx-check'></i>";
+
+    completeTaskEditingButtonElement.addEventListener(
+        "click",
+        async (event) => await requestUpdateTask()
+    )
+
+    title.style.top = "-2px";
+    replacingRowElement.appendChild(completeTaskEditingButtonElement);
+
+
+    function exitTaskEditing() {
+        document.removeEventListener(
+            "click",
+            catchOutsideClick
+        );
+
+        taskElement.style.display = "grid";
+        replacingRowElement.remove();
+
+        APPLICATION_MODE = APP_MODES.normal;
+    }
+
+
+    async function requestUpdateTask() {
+        const response = await request.post(
+            API + "tasks/update/",
+            JSON.stringify({
+                board: board,
+                previous: {
+                    title: initialState.title,
+                    content: initialState.content,
+                    deadline: initialState.deadline
+                },
+                new: {
+                    title: titleInput.value.trim(),
+                    content: contentTextarea.value.trim(),
+                    deadline: deadlineInput.value.trim()
+                },
+            })
+        );
+
+        if (response.status === 202) {
+            newTaskData = response.data;
+
+            ["title", "content", "deadline"].forEach(className => {
+                taskElement.getElementsByClassName(className)[0].innerText =
+                    newTaskData[className];
+            });
+        } else {
+            console.log("Ошибка:" + response.data);
+        }
+
+        exitTaskEditing();
+    }
+
+    function catchOutsideClick(event) {
+        const inReplacingRowElement = [
+            replacingRowElement,
+            titleInput,
+            deadlineInput,
+            contentTextarea,
+            raisedElement
+        ].includes(event.target);
+
+        if (!inReplacingRowElement &&
+            APPLICATION_MODE === APP_MODES.editingTask
+        ) {
+            exitTaskEditing();
+        }
+    }
+
+    document.addEventListener(
+        "click",
+        catchOutsideClick
+    );
+
+
+    APPLICATION_MODE = APP_MODES.editingTask;
+}
+
+/**
  * Creates a DOM element for task visualization & manipulation
  * 
  * @param {string} boardTitle Board title
@@ -25,18 +170,23 @@ function createTask(boardTitle, title, content, deadline) {
     const contentElement = document.createElement("p");
     const deadlineElement = document.createElement("p");
 
-    titleElement.textContent = title;
+    titleElement.innerText = title;
     titleElement.className = "title";
 
-    contentElement.textContent = content;
+    contentElement.innerText = content;
     contentElement.className = "content";
 
-    deadlineElement.textContent = deadline;
+    deadlineElement.innerText = deadline;
     deadlineElement.className = "deadline";
 
-    taskElement.appendChild(titleElement);
-    taskElement.appendChild(contentElement);
-    taskElement.appendChild(deadlineElement);
+    [titleElement, contentElement, deadlineElement].forEach(element => {
+        taskElement.appendChild(element);
+
+        element.addEventListener(
+            "click",
+            () => runTaskEditing(boardTitle, taskElement, element)
+        );
+    });
 
 
     function getTitleElement() {
@@ -68,7 +218,7 @@ function createTask(boardTitle, title, content, deadline) {
     
     completeTaskButtonElement.type = "button";
     completeTaskButtonElement.className = "simple";
-    completeTaskButtonElement.innerHTML = "<i class='bx bx-check'></i>";
+    completeTaskButtonElement.innerHTML = "<i class='bx bx-check-double'></i>";
 
     completeTaskButtonElement.addEventListener(
         "click",
@@ -78,9 +228,9 @@ function createTask(boardTitle, title, content, deadline) {
                 JSON.stringify({
                     board: boardTitle,
                     task: {
-                        title: titleElement.textContent || "",
-                        content: contentElement.textContent || "",
-                        deadline: deadlineElement.textContent || ""
+                        title: titleElement.innerText || "",
+                        content: contentElement.innerText || "",
+                        deadline: deadlineElement.innerText || ""
                     }
                 })
             )
@@ -131,14 +281,17 @@ function createCreationTaskForm(boardId, boardTitle) {
     
     const controllersElement = document.createElement("div");
     controllersElement.className = "row";
+    controllersElement.style.alignItems = "flex-start";
 
     const title = document.createElement("input");
+    title.maxLength = "50";
     title.type = "text";
     title.className = "create-title";
     title.id = "title";
     title.name = "title";
 
-    const content = document.createElement("input");
+    const content = document.createElement("textarea");
+    content.style.resize = "vertical";
     content.type = "text";
     content.className = "create-content";
     content.id = "content";
@@ -149,12 +302,26 @@ function createCreationTaskForm(boardId, boardTitle) {
     deadline.className = "create-deadline";
     deadline.id = "deadline";
     deadline.name = "deadline";
+
+    setTodaysDate();
+
     
+    function setTodaysDate() {
+        const today = new Date();
+    
+        deadline.value = `${
+            today.getFullYear()
+        }-${
+            String(today.getMonth() + 1).padStart(2, '0')
+        }-${
+            String(today.getDate()).padStart(2, '0')
+        }`;
+    }
 
     function clear() {
         title.value = "";
         content.value = "";
-        deadline.value = "";
+        setTodaysDate();
     }
 
     function getContent() {
@@ -304,6 +471,13 @@ function createBoard(title, tasks=[]) {
 /************************** main **************************/
 
 const API = "http://127.0.0.1:8080/api/v1/";
+
+const APP_MODES = {
+    normal: ">    Normal application mode    <",
+    editingTask: "> Task editing application mode <",
+}
+
+let APPLICATION_MODE = APP_MODES.normal;
 
 const request = axios.create({
     baseURL: API,

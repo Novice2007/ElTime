@@ -15,6 +15,7 @@ from ..models import (
 import json
 
 
+@csrf_exempt
 def boards(
     request: HttpRequest
 ) -> JsonResponse:

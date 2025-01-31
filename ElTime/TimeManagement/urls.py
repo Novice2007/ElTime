@@ -20,8 +20,21 @@ from django.urls import path
 
 from application.views import pages, redirects, api
 
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+
+@csrf_exempt
+def cors_test(request):
+    response = JsonResponse({'message': 'CORS test'})
+    response['Access-Control-Allow-Origin'] = '*'
+    response['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+    response['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+    return response
+
 
 urlpatterns = [
+    path('cors-test/', cors_test, name='cors_test'),
+
     path('admin/', admin.site.urls),
     path('welcome/', pages.welcome, name="welcome"),
     path('home/', pages.home, name="home"),
